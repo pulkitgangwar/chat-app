@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "137456548153",
+    "project_id": "chatapp-478d8",
+    "storage_bucket": "chatapp-478d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137456548153:android:b8f880bf66740e918450e8",
+        "android_client_info": {
+          "package_name": "com.pulkitgangwar.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137456548153-vaa9tftce806fie03n7st4o2tnn002nb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAg1jX994FgVqnV3kLg4RJChpy48vFuIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137456548153-vaa9tftce806fie03n7st4o2tnn002nb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
