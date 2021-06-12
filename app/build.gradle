@@ -1,8 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
-
 }
+
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
     compileSdkVersion 30
@@ -16,9 +18,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "FIREBASE_URL", "\"" + localProperties['FIREBASE_URL'] + "\"")
+            buildConfigField("String", "EMAIL_REGEX", "\"" + localProperties['EMAIL_REGEX'] + "\"")
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
