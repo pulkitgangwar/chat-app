@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,8 +29,9 @@ import java.util.regex.Pattern;
 public class RegisterActivity extends AppCompatActivity {
     EditText emailInput,nameInput,passwordInput,confirmPasswordInput;
     Button registerButton;
-    String emailRegex = BuildConfig.EMAIL_REGEX;
+    String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
     CircleImageView profileImage;
+    TextView loginLink;
     Uri imageUri;
     Uri downloadedImageUri;
 
@@ -53,7 +55,9 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPasswordInput = findViewById(R.id.register__confirmpassword);
         registerButton = findViewById(R.id.register__submit);
         profileImage = findViewById(R.id.register__profile);
+        loginLink = findViewById(R.id.register__link);
         Pattern emailPattern = Pattern.compile(emailRegex);
+
 
 //        firebase instances
         auth = FirebaseAuth.getInstance();
@@ -75,12 +79,10 @@ public class RegisterActivity extends AppCompatActivity {
                     emailInput.setError("empty");
                     passwordInput.setError("empty");
                     confirmPasswordInput.setError("empty");
-                }
-//                else if(!emailPattern.matcher(email).matches()) {
-//                    Toast.makeText(RegisterActivity.this,"Invalid Email",Toast.LENGTH_SHORT).show();
-//                    emailInput.setError("Invalid Email");
-//                }
-                else if(!password.equals(confirmPassword)) {
+                } else if(!emailPattern.matcher(email).matches()) {
+                    Toast.makeText(RegisterActivity.this,"Invalid Email",Toast.LENGTH_SHORT).show();
+                    emailInput.setError("Invalid Email");
+                } else if(!password.equals(confirmPassword)) {
                     Log.d("oncreate",password);
                     Log.d("oncreate",confirmPassword);
                     passwordInput.setError("password do not match");
@@ -103,6 +105,13 @@ public class RegisterActivity extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,"Select Picture"),REQUEST_CODE_PICK_IMAGE);
 
+            }
+        });
+
+        loginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
             }
         });
     }
