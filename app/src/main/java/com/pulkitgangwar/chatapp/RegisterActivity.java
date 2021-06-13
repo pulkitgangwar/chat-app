@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.google.android.gms.common.api.internal.TaskUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -76,10 +75,11 @@ public class RegisterActivity extends AppCompatActivity {
                     emailInput.setError("empty");
                     passwordInput.setError("empty");
                     confirmPasswordInput.setError("empty");
-                } else if(!emailPattern.matcher(email).matches()) {
-                    Toast.makeText(RegisterActivity.this,"Invalid Email",Toast.LENGTH_SHORT).show();
-                    emailInput.setError("Invalid Email");
                 }
+//                else if(!emailPattern.matcher(email).matches()) {
+//                    Toast.makeText(RegisterActivity.this,"Invalid Email",Toast.LENGTH_SHORT).show();
+//                    emailInput.setError("Invalid Email");
+//                }
                 else if(!password.equals(confirmPassword)) {
                     Log.d("oncreate",password);
                     Log.d("oncreate",confirmPassword);
@@ -112,19 +112,54 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    DatabaseReference reference = database.getReference().child("users").child(auth.getUid());
+
                     StorageReference storageReference = storage.getReference().child("userProfile").child(auth.getUid());
 //                     store user profile image to firebase storage
-//                    storeProfileImage(storageReference);
-//                     store user data in realtime database
-//                    storeUserInfo(reference,email,name);
-//                     send to main activity
-                    startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                    if(imageUri != null) {
+                        storageReference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                if(task.isSuccessful()) {
+                                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            downloadedImageUri = uri;
+                                            storeUserInfo(email,name,downloadedImageUri.toString());
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        String defaultUrl = "https://firebasestorage.googleapis.com/v0/b/chatapp-478d8.appspot.com/o/user_profile.png?alt=media&token=5fdcee9a-4f70-4840-ae00-3e69621fff82";
+                        storeUserInfo(email,name,defaultUrl);
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),"Registration Failed",Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+
+    private void storeUserInfo(String email,String name,String originalImageUri) {
+        DatabaseReference reference = database.getReference().child("users").child(auth.getUid());
+        User user = new User(name,email,originalImageUri,auth.getUid());
+
+        reference.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                } else {
+                    Toast.makeText(RegisterActivity.this,"Something went wrong while saving user",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+
+
     }
 
 
