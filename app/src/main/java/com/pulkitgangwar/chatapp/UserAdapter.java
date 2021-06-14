@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,6 +44,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 intent.putExtra("name",user.getName());
                 intent.putExtra("email",user.getEmail());
                 intent.putExtra("userProfileImage",user.getImageUri());
+                intent.putExtra("uid", FirebaseAuth.getInstance().getUid());
                 parentContext.startActivity(intent);
             }
         });
