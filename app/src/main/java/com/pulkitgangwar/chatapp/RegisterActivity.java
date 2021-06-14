@@ -140,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        String defaultUrl = "https://firebasestorage.googleapis.com/v0/b/chatapp-478d8.appspot.com/o/user_profile.png?alt=media&token=5fdcee9a-4f70-4840-ae00-3e69621fff82";
+                        String defaultUrl = "https://firebasestorage.googleapis.com/v0/b/chatapp-478d8.appspot.com/o/userimage.png?alt=media&token=844c3e8f-cd6f-44f9-bee7-05acf219f58d";
                         storeUserInfo(email,name,defaultUrl);
                     }
                 } else {
