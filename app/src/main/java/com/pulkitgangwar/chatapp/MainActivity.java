@@ -51,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         dashboardLogOut = findViewById(R.id.dashboard__logout);
 
 
+        // for recycler view
+        users = new ArrayList<>();
+        userAdapter = new UserAdapter(users);
+        dashboardRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        dashboardRecyclerView.setAdapter(userAdapter);
+
+
 
 
         if(user == null){
@@ -77,13 +84,9 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot firebaseUsers: dataSnapshot.getChildren()) {
                     User user = firebaseUsers.getValue(User.class);
-                    users = new ArrayList<>();
-                    userAdapter = new UserAdapter(users);
                     users.add(user);
-                    dashboardRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                    dashboardRecyclerView.setAdapter(userAdapter);
-                    userAdapter.notifyDataSetChanged();
                 }
+                    userAdapter.notifyDataSetChanged();
             }
 
             @Override
